@@ -65,7 +65,7 @@ if (!args[0] || !args[1]) {
     if (err) { throw err; }
 
     // Loop through contributors and download their images.
-    // Name images by their login name and assume .jpg
+    // Name images by their login name and assume .png
     for (contributor of result) {
       console.log(contributor.avatar_url);
 
