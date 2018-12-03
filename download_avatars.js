@@ -49,15 +49,15 @@ const args = process.argv.slice(2);
 
 if (!args[0] || !args[1]) {
   console.log('Please provide repository owner and name as arguments.');
-  return;
+} else {
+  getRepoContributors(args[0], args[1], function(err, result) {
+    if (err) { throw err; }
+
+    for (contributor of result) {
+      console.log(contributor.avatar_url);
+      const filePath = FILE_DIRECTORY + contributor.login + '.jpg';
+      downloadImageByURL(contributor.avatar_url, filePath);
+    }
+  });
 }
 
-getRepoContributors(args[0], args[1], function(err, result) {
-  if (err) { throw err; }
-
-  for (contributor of result) {
-    console.log(contributor.avatar_url);
-    const filePath = FILE_DIRECTORY + contributor.login + '.jpg';
-    downloadImageByURL(contributor.avatar_url, filePath);
-  }
-});
