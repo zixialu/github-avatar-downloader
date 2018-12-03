@@ -50,7 +50,7 @@ const args = process.argv.slice(2);
 if (!args[0] || !args[1]) {
   console.log('Please provide repository owner and name as arguments.');
 } else {
-  getRepoContributors(args[0], args[1], function(err, result) {
+  getRepoContributors(args[0], args[1], (err, result) => {
     if (err) { throw err; }
 
     for (contributor of result) {
