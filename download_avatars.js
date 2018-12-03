@@ -1,3 +1,4 @@
+require('dotenv').config()
 var request = require('request');
 
 
@@ -13,16 +14,27 @@ function getRepoContributors(repoOwner, repoName, cb) {
   const options = {
     url:`${urlPrefix}${repoOwner}/${repoName}/contributors`,
     headers: {
-      'User-Agent': 'github-avatar-downloader'
+      'User-Agent': 'github-avatar-downloader',
+      Authorization: 'token ' + process.env.GITHUB_PERSONAL_ACCESS_TOKEN
     }
   };
   request(options, (err, response, body) => {
-    cb(err, body);
+    if (!response || response.statusCode !== 200) {
+      console.log('An error has occured: ' + response.statusCode);
+      return;
+    }
+
+    // Call callback
+    cb(err, JSON.parse(body));
+
   });
 }
 
 // MARK: - Test
 getRepoContributors("jquery", "jquery", function(err, result) {
-  console.log("Errors:", err);
-  console.log("Result:", result);
+  if (err) { throw err; }
+
+  for (contributor of result) {
+    console.log(contributor.avatar_url);
+  }
 });
