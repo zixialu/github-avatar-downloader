@@ -2,7 +2,11 @@
   "name": "github-avatar-downloader",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "download_avatars.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zixialu/github-avatar-downloader"
+  },
   "scripts": {
     "test": "mocha"
   },
