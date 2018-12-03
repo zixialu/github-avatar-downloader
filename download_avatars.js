@@ -42,8 +42,17 @@ function downloadImageByURL(url, filePath) {
 }
 
 
-// MARK: - Test
-getRepoContributors("jquery", "jquery", function(err, result) {
+// MARK: - Run
+
+// [repoOwner, repoName]
+const args = process.argv.slice(2);
+
+if (!args[0] || !args[1]) {
+  console.log('Please provide repository owner and name as arguments.');
+  return;
+}
+
+getRepoContributors(args[0], args[1], function(err, result) {
   if (err) { throw err; }
 
   for (contributor of result) {
