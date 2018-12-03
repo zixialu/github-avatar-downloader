@@ -4,6 +4,8 @@ var fs = require('fs');
 
 
 // MARK: - Constants
+
+// The directory in which to save images.
 const FILE_DIRECTORY = './avatars/';
 
 
@@ -11,15 +13,21 @@ const FILE_DIRECTORY = './avatars/';
 console.log('Welcome to the GitHub Avatar Downloader!');
 
 function getRepoContributors(repoOwner, repoName, cb) {
-  // e.g. https://api.github.com/repos/jquery/jquery/contributors
+  // Make headers
   const options = {
+
+    // e.g. https://api.github.com/repos/jquery/jquery/contributors
     url: `https://api.github.com/repos/${repoOwner}/${repoName}/contributors`,
     headers: {
       'User-Agent': 'github-avatar-downloader',
       Authorization: 'token ' + process.env.GITHUB_PERSONAL_ACCESS_TOKEN
     }
   };
+
+  // Get JSON
   request(options, (err, response, body) => {
+
+    // Make sure there's no error
     if (!response || response.statusCode !== 200) {
       console.log('An error has occured: ' + response.statusCode);
       return;
@@ -27,7 +35,6 @@ function getRepoContributors(repoOwner, repoName, cb) {
 
     // Call callback
     cb(err, JSON.parse(body));
-
   });
 }
 
@@ -53,6 +60,8 @@ if (!args[0] || !args[1]) {
   getRepoContributors(args[0], args[1], (err, result) => {
     if (err) { throw err; }
 
+    // Loop through contributors and download their images.
+    // Name images by their login name and assume .jpg
     for (contributor of result) {
       console.log(contributor.avatar_url);
       const filePath = FILE_DIRECTORY + contributor.login + '.jpg';
