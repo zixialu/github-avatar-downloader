@@ -64,7 +64,9 @@ if (!args[0] || !args[1]) {
     // Name images by their login name and assume .jpg
     for (contributor of result) {
       console.log(contributor.avatar_url);
-      const filePath = FILE_DIRECTORY + contributor.login + '.jpg';
+
+      // TODO: Figure out the extension from content-type instead of assuming.
+      const filePath = FILE_DIRECTORY + contributor.login + '.png';
       downloadImageByURL(contributor.avatar_url, filePath);
     }
   });
