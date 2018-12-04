@@ -19,32 +19,45 @@ if (!args[0] || !args[1]) {
   // Invalid token
   console.log('Error: missing or invalid GitHub Personal Access Token!')
 } else {
-  getRepoContributors(args[0], args[1], (err, result) => {
+  console.log('Args and token OK');
+
+  getRepoContributors(args[0], args[1], (err, contributors) => {
     if (err) { throw err; }
 
     // Iterate over contributors, then starred repos and counts them
-    for (contributor of result) {
-      getStarredProjects(contributor.login, (err, result) => {
+    for (let contributor of contributors) {
+      getStarredProjects(contributor.login, (err, repos) => {
         if (err) { throw err; }
 
-        for (let repo of result) {
+        for (let repo of repos) {
+
           if (!starredRepos[repo.id]) {
             starredRepos[repo.id] = {
               name: repo.name,
-              owner: owner.login,
+              owner: repo.owner.login,
               count: 1
             };
           } else {
             starredRepos[repo.id].count++;
           }
+
+          // TODO: Exit condition; done downloading
+          if(/*EXIT CONDITION*/true) {
+            getStarredReposCompletionHandler()
+          }
         }
       });
     }
 
+
+  });
+}
+
+function getStarredReposCompletionHandler() {
     // Copy values into an array for later sorting
-    starredRepos.forEach(repo => {
-      orderedRepos.push(repo);
-    });
+    for (repo in starredRepos) {
+      orderedRepos.push(starredRepos[repo]);
+    };
 
     // Sort orderedRepos
     orderedRepos.sort((x, y) => { return x.count - y.count });
@@ -54,15 +67,13 @@ if (!args[0] || !args[1]) {
     for (let repo of orderedRepos) {
       console.log(`[ ${repo.count} stars ] ${repo.owner} / ${repo.name}`);
     }
-
-  });
 }
 
 function getStarredProjects(login, cb) {
 
   // Make headers
   const options = {
-    url: `https://api.github.com/users/${contributor.login}/starred`,
+    url: `https://api.github.com/users/${login}/starred`,
     headers: {
       'User-Agent': 'github-avatar-downloader',
       Authorization: 'token ' + process.env.GITHUB_PERSONAL_ACCESS_TOKEN
