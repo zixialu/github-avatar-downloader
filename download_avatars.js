@@ -1,6 +1,7 @@
 require('dotenv').config();
 var request = require('request');
 var fs = require('fs');
+var getRepoContributors = require('./getRepoContributors');
 
 
 // MARK: - Constants
@@ -11,32 +12,6 @@ const FILE_DIRECTORY = './avatars/';
 
 // MARK: Download
 console.log('Welcome to the GitHub Avatar Downloader!');
-
-function getRepoContributors(repoOwner, repoName, cb) {
-  // Make headers
-  const options = {
-
-    // e.g. https://api.github.com/repos/jquery/jquery/contributors
-    url: `https://api.github.com/repos/${repoOwner}/${repoName}/contributors`,
-    headers: {
-      'User-Agent': 'github-avatar-downloader',
-      Authorization: 'token ' + process.env.GITHUB_PERSONAL_ACCESS_TOKEN
-    }
-  };
-
-  // Get JSON
-  request(options, (err, response, body) => {
-
-    // Make sure there's no error
-    if (!response || response.statusCode !== 200) {
-      console.log('An error has occured: ' + response.statusCode);
-      return;
-    }
-
-    // Call callback
-    cb(err, JSON.parse(body));
-  });
-}
 
 function downloadImageByURL(url, filePath) {
   request.get(url).on('error', err => {
@@ -75,4 +50,3 @@ if (!args[0] || !args[1]) {
     }
   });
 }
-
