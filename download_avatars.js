@@ -34,7 +34,7 @@ if (!args[0] || !args[1]) {
   console.log('Please provide repository owner and name as arguments.');
 } else if (!process.env.GITHUB_PERSONAL_ACCESS_TOKEN) {
   // Invalid token
-  console.log('Error: missing or invalid GitHub Personal Access Token!')
+  console.log('Error: missing or invalid GitHub Personal Access Token!');
 } else {
   getRepoContributors(args[0], args[1], (err, result) => {
     if (err) { throw err; }
