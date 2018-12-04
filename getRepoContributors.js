@@ -1,3 +1,7 @@
+require('dotenv').config();
+var request = require('request');
+
+
 function getRepoContributors(repoOwner, repoName, cb) {
   // Make headers
   const options = {
