@@ -4,6 +4,7 @@ var getRepoContributors = require('./getRepoContributors');
 
 
 var starredRepos = {};
+var orderedRepos = [];
 
 
 // MARK: - Run
@@ -40,13 +41,19 @@ if (!args[0] || !args[1]) {
       });
     }
 
-    // Find the most counted repos
-    for(repo in starredRepos) {
-      // TODO: move repo objects into an array sorted by most starred
+    // Copy values into an array for later sorting
+    starredRepos.forEach(repo => {
+      orderedRepos.push(repo);
+    });
+
+    // Sort orderedRepos
+    orderedRepos.sort((x, y) => { return x.count - y.count });
+
+    // Print top 5 results
+    orderedRepos.slice(0, 5);
+    for (let repo of orderedRepos) {
+      console.log(`[ ${repo.count} stars ] ${repo.owner} / ${repo.name}`);
     }
-
-    // Print results
-
 
   });
 }
